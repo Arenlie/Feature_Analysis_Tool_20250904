@@ -1,0 +1,250 @@
+
+[
+	{
+		"acceleration" : [ 1, 2, 3, 4, 5, 6, 7, 8 ],
+		"bias_voltage" : true,
+		"channel_id" : "50294D208447013",
+		"channel_type" : 1
+	},
+	{
+		"bias_voltage" : true,
+		"channel_id" : "50294D208447022",
+		"channel_type" : 2,
+		"velocity" : [ 21, 22, 23, 24, 25, 26, 27 ]
+	},
+	{
+		"bias_voltage" : true,
+		"channel_id" : "50294D208447012",
+		"channel_type" : 3,
+		"displacement" : [ 300 ]
+	},
+	{
+		"bias_voltage" : true,
+		"channel_id" : "50294D208447012",
+		"channel_type" : 3,
+		"displacement" : [ 41, 42, 43, 44, 45, 46, 47 ]
+	},
+	{
+		"base_freq_domain" : [ 61, 62, 63, 64, 65, 66, 67, 68, 69 ],
+		"bias_voltage" : true,
+		"channel_id" : "50294D208447014",
+		"channel_type" : 2,
+		
+		"gear_fault" : 
+		{
+			"feature_list" : 
+			[
+				141,
+				142,
+				143,
+				144,
+				145,
+				146,
+				147,
+				148,
+				149,
+				150,
+				151,
+				152,
+				153,
+				154,
+				155
+			],
+			"teeth_number" : 12
+		},
+		"motor_fault" : 
+		{
+			"feature_list" : 
+			[
+				81,
+				82,
+				83,
+				84,
+				85,
+				86,
+				87,
+				88,
+				89,
+				90,
+				91,
+				92,
+				93,
+				94,
+				95,
+				96,
+				97,
+				98,
+				99,
+				100
+			],
+			"power_freq" : 20,
+			"rated_rpm" : 650,
+			"rotor_number" : 12,
+			"sync_rpm" : 700
+		},
+		"other_fault" : 
+		{
+			"derived_blade_num" : 22,
+			"feature_list" : [ 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173 ],
+			"impeller_blade_num" : 12
+		},
+		"rolling_bear" : 
+		{
+			"bear_id" : 16002,
+			"feature_list" : 
+			[
+				111,
+				112,
+				113,
+				114,
+				115,
+				116,
+				117,
+				118,
+				119,
+				120,
+				121,
+				122,
+				123,
+				124,
+				125,
+				126,
+				127,
+				128,
+				129,
+				130
+			]
+		},
+		"velocity" : [ 21, 22, 23, 24, 25, 26, 27 ]
+	},
+	{
+		"acceleration" : [ 1, 2, 3, 4, 5, 6, 7, 8 ],
+		"base_freq_domain" : [ 61, 62, 63, 64, 65, 66, 67, 68, 69 ],
+		"bias_voltage" : true,
+		"channel_id" : "50294D208447011",
+		"channel_type" : 1,
+		"custom_fault" : 
+		{
+			"custom1_freq" : 23,
+			"custom1_hcr_band_freq" : 4,
+			"custom1_hcr_center_freq" : 45,
+			"custom1_hrs_lower_bound" : 100,
+			"custom1_hrs_upper_bound" : 200,
+			"custom2_freq" : 24,
+			"custom2_hcr_band_freq" : 6,
+			"custom2_hcr_center_freq" : 56,
+			"custom2_hrs_lower_bound" : 200,
+			"custom2_hrs_upper_bound" : 300,
+			"feature_list" : 
+			[
+				191,
+				192,
+				193,
+				194,
+				195,
+				196,
+				197,
+				198,
+				199,
+				200,
+				201,
+				202,
+				203,
+				204,
+				205,
+				206,
+				207,
+				208,
+				209,
+				210,
+				211,
+				212
+			]
+		},
+		"gear_fault" : 
+		{
+			"feature_list" : 
+			[
+				141,
+				142,
+				143,
+				144,
+				145,
+				146,
+				147,
+				148,
+				149,
+				150,
+				151,
+				152,
+				153,
+				154,
+				155
+			],
+			"teeth_number" : 10
+		},
+		"motor_fault" : 
+		{
+			"feature_list" : 
+			[
+				81,
+				82,
+				83,
+				84,
+				85,
+				86,
+				87,
+				88,
+				89,
+				90,
+				91,
+				92,
+				93,
+				94,
+				95,
+				96,
+				97,
+				98,
+				99,
+				100
+			],
+			"power_freq" : 50,
+			"rated_rpm" : 1980,
+			"rotor_number" : 112,
+			"sync_rpm" : 2000
+		},
+		"other_fault" : 
+		{
+			"derived_blade_num" : 23,
+			"feature_list" : [ 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173 ],
+			"impeller_blade_num" : 11
+		},
+		"rolling_bear" : 
+		{
+			"bear_id" : 10,
+			"feature_list" : 
+			[
+				111,
+				112,
+				113,
+				114,
+				115,
+				116,
+				117,
+				118,
+				119,
+				120,
+				121,
+				122,
+				123,
+				124,
+				125,
+				126,
+				127,
+				128,
+				129,
+				130
+			]
+		}
+	}
+]
