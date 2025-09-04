@@ -1,0 +1,35 @@
+
+.big_button {{
+  color: {QTMATERIAL_SECONDARYCOLOR};
+  text-transform: none;
+  /*background-color: {QTMATERIAL_PRIMARYCOLOR};*/
+  border-image: url("images/btn_bg.png");
+  border-radius: 15px;
+}}
+
+.label {{
+  color: whitesmoke;
+  font-family: "Microsoft YaHei UI";
+  font-weight: bold;
+  font-size: 22px;
+}}
+
+.btn_label {{
+  color: whitesmoke;
+  font-family: "Microsoft YaHei UI";
+  font-weight: bold;
+  font-size: 18px;
+}}
+
+.label_small {{
+  color: whitesmoke;
+  font-family: "Microsoft YaHei UI";
+  /*font-weight: bold;*/
+  font-size: 20px;
+}}
+
+.messageBox {{
+  min-width: 800px;
+  min-height: 200px;
+  layout: fixed;
+}}
