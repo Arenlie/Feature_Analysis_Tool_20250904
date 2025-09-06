@@ -31,8 +31,8 @@ def output_template(parm_data, bearing_data):
      Current_Pos_THD, Current_Neg_THD, Current_Zero_THD, Current_Total_THD,
      Voltage_RMS, Voltage_PK, Voltage_CF, Voltage_Power_RMS, Voltage_THDF, Voltage_Odd_THD, Voltage_Even_THD,
      Voltage_Pos_THD, Voltage_Neg_THD, Voltage_Zero_THD, Voltage_Total_THD, Noise_RMS, Noise_PK, Noise_Kurt,
-     Noise_Imp, dis_voltgap, dis_pp, dis_peak, dis_rms, dis_amp1x, dis_phase2x, dis_phase2x, dis_amp2x, dis_phase2x,
-     dis_ampHx, dis_ampRt, dis_kurt, dis_mean) = ['null'] * 163
+     Noise_Imp, dis_voltgap, dis_pp, dis_peak, dis_rms, dis_amp_1x, dis_phase_1x, dis_amp_2x, dis_phase_2x, dis_amp_1_2x, dis_phase_1_2x,
+     dis_ampRt, dis_kurt, dis_mean, dis_skew) = ['null'] * 164
 
     eq_name, eq_code, point_name, point_code, channel_id, sensor_type, DW_type, L, N, nc, n, f0, m, Bearing_designation, \
         Manufacturer, Z, vane, G_vane, EDF1, EDF2, fc1, fb1, fc2, fb2, F_min1, F_max1, F_min2, F_max2 = parm_data
@@ -61,7 +61,7 @@ def output_template(parm_data, bearing_data):
     elif sensor_type == '声音':
         Noise_RMS, Noise_PK, Noise_Kurt, Noise_Imp = ['v'] * 4
     elif sensor_type == '径向位移':
-        dis_voltgap, dis_pp, dis_peak, dis_rms, dis_amp1x, dis_phase2x, dis_phase2x, dis_amp2x, dis_phase2x, dis_ampHx, dis_ampRt, dis_kurt = ['v'] * 12
+        dis_voltgap, dis_pp, dis_peak, dis_rms, dis_amp_1x, dis_phase_1x, dis_amp_2x, dis_phase_2x, dis_amp_1_2x, dis_phase_1_2x, dis_ampRt, dis_kurt, dis_skew = ['v'] * 13
     elif sensor_type == '轴向位移':
         dis_mean = ['v'] * 1
 
@@ -83,9 +83,9 @@ def output_template(parm_data, bearing_data):
         GSE_sum = "v"
     if ismy_null(N) and Bearing_designation == "滑动轴承":
         Whirl_energy_sum = "v"
-    if ismy_null(N) and ismy_null(Bearing_designation) and ismy_null(Manufacturer):
+    if ismy_null(N) and ismy_null(str(Bearing_designation)) and ismy_null(str(Manufacturer)):
         bearing_one = bearing_data.loc[
-            (bearing_data['轴承型号'] == str(Bearing_designation)) & (bearing_data['轴承厂家'] == Manufacturer)]
+            (bearing_data['轴承型号'] == str(Bearing_designation).split(".")[0]) & (bearing_data['轴承厂家'] == Manufacturer)]
         if not bearing_one.empty:
             BPFI_1X, BPFI_2X, BPFI_3X, BPFI_4X, BPFI_5X = ['v'] * 5
             BPFO_1X, BPFO_2X, BPFO_3X, BPFO_4X, BPFO_5X = ['v'] * 5
@@ -129,8 +129,8 @@ def output_template(parm_data, bearing_data):
                 Current_Pos_THD, Current_Neg_THD, Current_Zero_THD, Current_Total_THD,
                 Voltage_RMS, Voltage_PK, Voltage_CF, Voltage_Power_RMS, Voltage_THDF, Voltage_Odd_THD, Voltage_Even_THD,
                 Voltage_Pos_THD, Voltage_Neg_THD, Voltage_Zero_THD, Voltage_Total_THD,  Noise_RMS, Noise_PK, Noise_Kurt,
-                Noise_Imp, dis_voltgap, dis_pp, dis_peak, dis_rms, dis_amp1x, dis_phase2x, dis_phase2x, dis_amp2x, dis_phase2x,
-                dis_ampHx, dis_ampRt, dis_kurt, dis_mean]
+                Noise_Imp, dis_voltgap, dis_pp, dis_peak, dis_rms, dis_amp_1x, dis_phase_1x, dis_amp_2x, dis_phase_2x,
+                dis_amp_1_2x, dis_phase_1_2x, dis_ampRt, dis_kurt, dis_mean, dis_skew]
     return res_type
 
 
