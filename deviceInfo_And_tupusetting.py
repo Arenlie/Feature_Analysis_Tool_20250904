@@ -98,7 +98,8 @@ def device_info(file1, file2, file4):
             df_deviceinfo.at[index, 'MAC地址'] = mac2  # 填写无线传感器的’MAC地址‘，实则为网关的sn号
 
         data_type_cod3 = series['数据项编码'][-3:]
-        if series['测点编号'][-2] in ['Z']:
+        print("data_type_cod3:", data_type_cod3)
+        if series['测点编号'][-2] in ['Z'] and series['测点类型'] == '加速度':
             if data_type_cod3 == '001':
                 df_deviceinfo.at[index, '通道值'] = 'integratRMS'
             elif data_type_cod3 == '003':
@@ -111,7 +112,7 @@ def device_info(file1, file2, file4):
                 df_deviceinfo.at[index, '通道值'] = 'integratPk'
             elif data_type_cod3 == '000':
                 df_deviceinfo.at[index, '通道值'] = 'TemperatureBot'
-        elif series['测点编号'][-2] in ['X', 'Y']:
+        elif series['测点编号'][-2] in ['X', 'Y'] and series['测点类型'] == '加速度':
             if data_type_cod3 == '001':
                 df_deviceinfo.at[index, '通道值'] = 'integratRMS'
             elif data_type_cod3 == '003':
