@@ -3,6 +3,7 @@ import os
 
 import pandas as pd
 import json
+
 from feature_values import *
 
 
@@ -15,7 +16,10 @@ def feature_json_all(input_path, output_path):
         folder_path = os.path.join(output_path, sheet_name)
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
-        feature_json(df, folder_path)
+        try:
+            feature_json(df, folder_path)
+        except Exception as e:
+            return f"Json文件输出失败，请检查DW-导入表文件格式"
 
 
 def feature_json(input_data, output_path):
@@ -31,6 +35,7 @@ def feature_json(input_data, output_path):
     error_list = {}
     json_channel_setting_tmp = {}
     point_type_list = ['加速度', '速度', '径向振动位移', '轴向位移', '转速', '过程变量', '普通电压', '温度', '位移']
+    # point_type_list = ['转速', '径向振动位移', '加速度', '速度', '声音', '轴向位移', '动态电压', '温度', '过程变量', '普通电压']
     json_file_path = '后台文件/tmp_ChannelSettings.json'
     with open(json_file_path, 'r', encoding='utf-8') as file:
         json_channel_settings = json.load(file)
@@ -87,7 +92,7 @@ def feature_json(input_data, output_path):
             card_index = row_card_index
 
         if row_board_type == '高速卡':
-            if point_type not in ['加速度', '速度', '径向振动位移', '轴向位移', '转速']:
+            if point_type not in ['加速度', '转速']:
                 row_error_list.append(f'WrongPointTypeError:point_type at {row_index} row is wrong')
             if df_row['键相类型'] == '虚拟键相' and point_type != '转速':
                 try:
@@ -145,7 +150,7 @@ def feature_json(input_data, output_path):
 
         # 创建row_json_cs
         point_type_index = point_type_list.index(point_type)
-        print("point_type_index", point_type_index)
+        # print("point_type_index", point_type_index)
         row_json_cs = copy.deepcopy(json_channel_settings[0])
         # 指定测点名称
         if not none_judge(channel_name):
@@ -260,11 +265,18 @@ def feature_json(input_data, output_path):
                                                                                kRollingBearingRollingElement5X + 1))}
         json_output_feature.append(row_json_feature)
 
-    for i in range(len(input_data), 32):
-        card_index = i // 4 + 1
-        channel_index = i % 4 + 1
-        json_channel_setting_tmp['channelId'] = mac_address + str(f'0{card_index}') + str(channel_index)
-        json_output_channel_settings.append(copy.deepcopy(json_channel_setting_tmp))
+    # if input_data['通道编号'].astype(str).str.contains("CH08").any():
+    #     for i in range(len(input_data), 16):
+    #         card_index = i // 8 + 1
+    #         channel_index = i % 8 + 1
+    #         json_channel_setting_tmp['channelId'] = mac_address + str(f'0{card_index}') + str(channel_index)
+    #         json_output_channel_settings.append(copy.deepcopy(json_channel_setting_tmp))
+    # else:
+    #     for i in range(len(input_data), 32):
+    #         card_index = i // 4 + 1
+    #         channel_index = i % 4 + 1
+    #         json_channel_setting_tmp['channelId'] = mac_address + str(f'0{card_index}') + str(channel_index)
+    #         json_output_channel_settings.append(copy.deepcopy(json_channel_setting_tmp))
 
     file = open(f'{output_path}/ChannelSettings.json', 'w', encoding='utf-8')
     file.write(json.dumps(json_output_channel_settings, ensure_ascii=False))
@@ -279,3 +291,15 @@ def feature_json(input_data, output_path):
         file = open(f'{output_path}/Features.json', 'w', encoding='utf-8')
         file.write(json.dumps(json_output_feature, ensure_ascii=False))
         file.close()
+
+
+if __name__ == '__main__':
+    # from dataToDWTable import dataToDWTable
+    # dataToDWTable(r"C:\Users\Administrator\Desktop\测试\data_all(2700).xlsx",
+    #               r"C:\Users\Administrator\Desktop\测试\DW2700导入表.xlsx")
+    if_err = feature_json_all(r"C:\Users\Administrator\Desktop\测试\DW2300导入表.xlsx",
+                              r"C:\Users\Administrator\Desktop\测试\json_2300")
+    if if_err:
+        print(if_err)
+    else:
+        print(r"Json文件保存到：\nC:\Users\Administrator\Desktop\测试\json_2300")

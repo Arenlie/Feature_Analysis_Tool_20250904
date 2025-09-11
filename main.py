@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import QApplication, QPushButton, QMainWindow, QLabel, QVBo
     QDialog
 from qt_material import apply_stylesheet
 
-from dataTo2700table import dataTo2700table
+from dataToDWTable import dataToDWTable
 from fea_json import feature_json_all
 from images.UImain import Ui_MainWindow
 from PlatformTable import output_template_all
@@ -98,7 +98,7 @@ class Worker4(QThread):
 
     def run(self):
         try:
-            dataTo2700table(self.inputFile, self.zz)
+            dataToDWTable(self.inputFile, self.zz)
             if_err = feature_json_all(self.zz, self.outputFile)
             if if_err:
                 print(if_err)
@@ -107,6 +107,8 @@ class Worker4(QThread):
                 self.finished.emit(f"Json文件保存到：\n{self.outputFile}")
         except PermissionError:
             self.finished.emit("访问权限限制，请关闭相关文件")
+        except ValueError as e:
+            self.finished.emit(f"{e}")
         except Exception as e:
             print(traceback.format_exc())
             self.finished.emit("Json文件输出失败，请检查DW-导入表文件格式")
@@ -122,15 +124,17 @@ class Worker5(QThread):
 
     def run(self):
         try:
-            dataTo2700table(self.inputFile, self.outputFile)
+            dataToDWTable(self.inputFile, self.outputFile)
             self.finished.emit(f"DW-导入表保存到：\n{self.outputFile}")
         except PermissionError:
             self.finished.emit("访问权限限制，请关闭相关文件")
         except KeyError as e:
             self.finished.emit(f"文件缺少列：{e}")
+        except ValueError as e:
+            self.finished.emit(f"{e}")
         except Exception as e:
             print(traceback.format_exc())
-            self.finished.emit("DW-导入表输出失败，请检查DW-导入表文件格式")
+            self.finished.emit("DW-导入表输出失败，请检查data_all文件格式")
 
 
 class Worker6(QThread):

@@ -41,7 +41,8 @@ def device_info(file1, file2, file4):
     pointtype_list = []
     sensor_list = []
     for index, series in df4.iterrows():
-        if series['测点（通道）类型'] in ['加速度', "应力波", "位移", '速度', '温度', '电流谱', '电压谱', '声音', '径向位移', '轴向位移']:
+        if series['测点（通道）类型'] in ['加速度', "应力波", "位移", '速度', '温度', '电流谱', '电压谱', '声音',
+                                        '径向位移', '轴向位移']:
             # 筛选出需要的行
             equipname_list.append(series['设备名称'])
             equipcod_list.append(series['设备编码'])
@@ -54,14 +55,16 @@ def device_info(file1, file2, file4):
             pointtype_list.append(series['测点（通道）类型'])
 
             sensor_list.append(
-                'ACCELEROMETER' if series['测点（通道）类型'] in ['加速度', '应力波', '电流谱', '电压谱', '声音', '径向位移', '轴向位移']
+                'ACCELEROMETER' if series['测点（通道）类型'] in ['加速度', '应力波', '电流谱', '电压谱', '声音',
+                                                                '径向位移', '轴向位移']
                 else 'VELOCITY' if series['测点（通道）类型'] == '速度'
                 else 'DISPLACEMENT' if series['测点（通道）类型'] == '位移'
                 else 'TEMPERATURE' if series['测点（通道）类型'] == '温度'
                 else 'Unknown')
 
     df_deviceinfo = pd.DataFrame(
-        columns=['区域', '设备名称', '设备编码', '测点名称', '测点编号', '数据项名称', '数据项编码', 'MAC地址', '通道编号', '通道类型', '通道值', '单位', '测点类型']
+        columns=['区域', '设备名称', '设备编码', '测点名称', '测点编号', '数据项名称', '数据项编码', 'MAC地址',
+                 '通道编号', '通道类型', '通道值', '单位', '测点类型']
     )
     df_deviceinfo['设备名称'] = equipname_list
     df_deviceinfo['设备编码'] = equipcod_list
@@ -90,12 +93,12 @@ def device_info(file1, file2, file4):
         else:
             df_deviceinfo.at[index, '区域'] = 'Unknown'  # 可以设置一个默认值，以便调试
 
-        if series['测点编号'][-2:-1] not in ['X', 'Y', 'Z']:
-            mac = str(series['通道编号'])[:-3]
-            df_deviceinfo.at[index, 'MAC地址'] = mac
-        else:
+        if series['测点编号'][-2:-1] in ['X', 'Y', 'Z'] and series['测点类型'] == '加速度':
             mac2 = str(series['通道编号'])[:-2]
             df_deviceinfo.at[index, 'MAC地址'] = mac2  # 填写无线传感器的’MAC地址‘，实则为网关的sn号
+        else:
+            mac = str(series['通道编号'])[:-3]
+            df_deviceinfo.at[index, 'MAC地址'] = mac
 
         data_type_cod3 = series['数据项编码'][-3:]
         print("data_type_cod3:", data_type_cod3)
@@ -218,5 +221,6 @@ def tupuSetting_V3(file1, file4):
 
 
 if __name__ == "__main__":
-    device_info(r"H:\chaos项目资料\特征解析工具汇编\测试文件\data_all - 平台导入表(电流电压).xlsx", "后台文件/my_def_对应注释.xlsx", "device.xlsx")
+    device_info(r"H:\chaos项目资料\特征解析工具汇编\测试文件\data_all - 平台导入表(电流电压).xlsx",
+                "后台文件/my_def_对应注释.xlsx", "device.xlsx")
     # tupuSetting_V3(r"H:\chaos项目资料\特征解析工具汇编\测试文件\data_all - 平台导入表(电流电压).xlsx", "tupusetting.xlsx")
