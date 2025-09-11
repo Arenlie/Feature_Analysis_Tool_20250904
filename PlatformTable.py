@@ -67,7 +67,7 @@ def output_template(parm_data, bearing_data):
 
     if ismy_null(f0):
         DPF_1X, DPF_2X, DPF_3X, DPF_4X, DPF_5X = ['v'] * 5
-    if ismy_null(N) and sensor_type != '应力波':
+    if sensor_type != '应力波' and (isinstance(N, float) or isinstance(N, int) or N == "外部键相") and ismy_null(N):
         RF_1X, RF_2X, RF_3X, RF_4X, RF_5X = ['v'] * 5
         RF_1_2X, RF_1_3X, RF_1_4X, RF_1_5X = ['v'] * 4
 
@@ -273,3 +273,4 @@ if __name__ == "__main__":
     output_template_all(r"H:\chaos项目资料\特征解析工具汇编\测试文件\data_all(模板).xlsx",
                         r"后台文件\my_def_对应注释.xlsx",
                         r"H:\chaos项目资料\特征解析工具汇编\测试文件\data_all - 平台导入表(电流电压).xlsx", False)
+
