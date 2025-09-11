@@ -67,20 +67,23 @@ def dataToDWTable(inputFile, outputFile):
             # if host_mac not in existing_data:
             #     existing_data[host_mac] = {}
             # 如果该主机MAC还没有记录，初始化
-            if host_mac not in existing_data:
-                existing_data[host_mac] = {
-                    "tags": [row["网关型号"]]  # 初始化标签列表
-                }
+            host_dict = existing_data.setdefault(host_mac, {})
+            host_dict.setdefault("tags", [])
+            if row["网关型号"] not in host_dict["tags"]:
+                host_dict["tags"].append(row["网关型号"])
 
-            # 如果该板卡还没有记录，初始化
-            if card_number not in existing_data[host_mac]:
-                existing_data[host_mac][card_number] = []
+            # 2) 板卡层：必须是 dict（之前是 [] 导致后续用字符串键失败）
+            card_dict = host_dict.setdefault(card_number, {})  # e.g., "C02" -> {}
 
-            # 记录已有的通道编号
-            existing_data[host_mac][card_number].append(channel_number)
+            # 3) 通道层：同样是 dict 的键（字符串），值为该通道的记录 list
+            ch_list = card_dict.setdefault(channel_number, [])  # e.g., "CH01" -> []
+
+            # 4) 写入该通道的数据
+            ch_list.append(point_type)
     # 第二步：补充缺失的板卡和通道，并保证高速卡和低速卡的数量均衡
     for host_mac, cards in existing_data.items():
         # 记录当前主机MAC的板卡计数，确保高速卡和低速卡均衡
+        speed_count = 0
         high_speed_count = 0
         low_speed_count = 0
         card_keys = list(cards.keys())
@@ -88,20 +91,25 @@ def dataToDWTable(inputFile, outputFile):
         tags = cards.get("tags", [])
         if tags[0] == "DW2700":
             for card in all_cards_1:
-                # 确定板卡类型：前4个为高速卡，后4个为低速卡
-                if high_speed_count < 4:
-                    card_type = "高速卡"
-                    high_speed_count += 1
-                else:
-                    card_type = "低速卡"
-                    low_speed_count += 1
-
+                # 确定8个板卡类型，不足补高速卡
+                card_type = "低速卡"
+                if speed_count < 8:
+                    speed_count += 1
                 # 如果该板卡已经存在，则检查其通道并补充缺失的通道
                 if card in card_keys:
+                    for channel_had in list(cards[card]):
+                        if cards[card][channel_had][0] == "温度":
+                            print(111)
+                            card_type = "低速卡"
+                            break
+                        else:
+                            card_type = "高速卡"
+                            break
                     if card != "tags":  # 跳过标签
                         existing_channels = cards[card]
                         # 补充该板卡缺失的通道
                         for channel in all_channels_1:
+                            # if
                             if channel not in existing_channels:
                                 if card_type == "高速卡":
                                     row_data = {
@@ -159,7 +167,7 @@ def dataToDWTable(inputFile, outputFile):
                         rows.append(row_data)
         elif tags[0] == "DW2300":
             for card in all_cards_2:
-                # 确定板卡类型：前4个为高速卡，后4个为低速卡
+                # 确定板卡类型：前1个为高速卡，后1个为低速卡
                 if high_speed_count < 1:
                     card_type = "高速卡"
                     high_speed_count += 1
@@ -313,5 +321,5 @@ def align_merged_cells(sheet, start_row, end_row, column_index):
 
 
 if __name__ == "__main__":
-    dataToDWTable(r"D:\项目资料\特征解析工具汇编\PHM2.0打包\data_all - 2300测试.xlsx",
-                    r"D:\项目资料\特征解析工具汇编\PHM2.0打包\data_all - 2700导入表.xlsx")
+    dataToDWTable(r"C:\Users\Administrator\Desktop\data_all(2700) - 副本.xlsx",
+                    r"C:\Users\Administrator\Desktop\data_all - 2700导入表.xlsx")
