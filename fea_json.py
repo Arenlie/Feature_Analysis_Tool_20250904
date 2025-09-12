@@ -257,8 +257,9 @@ def feature_json(input_data, output_path):
             # noinspection PyTypedDict
             row_json_feature['rolling_bear'] = {"feature_list": [kOilWhirlHRS]}
         elif none_judge(N) and none_judge(Bearing_designation) and none_judge(Manufacturer):
+            Bearing_designation = str(Bearing_designation).split(".")[0]
             bearing_one = bearing_data.loc[
-                (bearing_data['NAME=型号'] == str(Bearing_designation)) & (bearing_data['MANUFACTURE'] == Manufacturer)]
+                (bearing_data['NAME=型号'] == Bearing_designation) & (bearing_data['MANUFACTURE'] == Manufacturer)]
             if not bearing_one.empty:
                 row_json_feature['rolling_bear'] = {'bear_id': int(bearing_one.iloc[0][0]),
                                                     'feature_list': list(range(kRollingBearingInnerRing1X,
