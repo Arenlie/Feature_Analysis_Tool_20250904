@@ -14,25 +14,26 @@ def output_template(parm_data, bearing_data):
     def ismy_null(value):
         return not (pd.isna(value) or value == "" or value is None or pd.isnull(value) or value == "/" or value == "\\")
 
-    (ylb_SWE, ylb_SWPE, ylb_SWPA, ylb_vel_rms, ylb_kur, ylb_acc_rms, ylb_impulse,
-     vel_pass_rms, vel_low_rms, acc_rms, acc_p, vibration_impulse,
-     acc_kurtosis, acc_skew, vel_p, max_positive_p, max_negative_p, mon_pp, dia_pp, peak, peaking_factor, de_p,
-     ave_axi_disp, RF_1X, RF_2X, RF_3X, RF_4X, RF_5X, RF_1_2X, RF_1_3X, RF_1_4X, RF_1_5X, DPF_1X, DPF_2X, DPF_3X, DPF_4X, DPF_5X,
-     GDE_ratio_1X, GDE_ratio_2X, GDE_ratio_3X, GDE_ratio_4X, GDE_ratio_5X, RFE_ratio_1X, RFE_ratio_2X,
-     RFE_ratio_3X, RFE_ratio_4X, RFE_ratio_5X, RLE_ratio_1X, RLE_ratio_2X, RLE_ratio_3X, RLE_ratio_4X,
-     RLE_ratio_5X, BPFI_1X, BPFI_2X, BPFI_3X, BPFI_4X, BPFI_5X, BPFO_1X, BPFO_2X, BPFO_3X, BPFO_4X, BPFO_5X,
-     FTF_1X, FTF_2X, FTF_3X, FTF_4X, FTF_5X, BSF_1X, BSF_2X, BSF_3X, BSF_4X, BSF_5X, GMF_1X, GMF_2X, GMF_3X,
-     GMF_4X, GMF_5X, GLE_sum_1X, GLE_sum_2X, GLE_sum_3X, GLE_sum_4X, GLE_sum_5X, GUE_sum_1X, GUE_sum_2X,
-     GUE_sum_3X, GUE_sum_4X, GUE_sum_5X, Whirl_energy_sum, BPF_1X, BPF_2X, BPF_3X, BPF_4X, BPF_5X, DBPF_1X,
-     DBPF_2X, DBPF_3X, DBPF_4X, DBPF_5X, ISE_sum, GSE_sum, EDF1_1X, EDF1_2X, EDF1_3X, EDF1_4X, EDF1_5X, EDF2_1X,
-     EDF2_2X, EDF2_3X, EDF2_4X, EDF2_5X, EDF1_ratio_1X, EDF1_ratio_2X, EDF1_ratio_3X, EDF1_ratio_4X, EDF1_ratio_5X,
-     EDF2_ratio_1X, EDF2_ratio_2X, EDF2_ratio_3X, EDF2_ratio_4X, EDF2_ratio_5X, EDF1_sum, EDF2_sum, DCValues, TemValues,
-     Current_RMS, Current_PK, Current_CF, Current_Power_RMS, Current_THDF, Current_Odd_THD, Current_Even_THD,
-     Current_Pos_THD, Current_Neg_THD, Current_Zero_THD, Current_Total_THD,
-     Voltage_RMS, Voltage_PK, Voltage_CF, Voltage_Power_RMS, Voltage_THDF, Voltage_Odd_THD, Voltage_Even_THD,
-     Voltage_Pos_THD, Voltage_Neg_THD, Voltage_Zero_THD, Voltage_Total_THD, Noise_RMS, Noise_PK, Noise_Kurt,
-     Noise_Imp, dis_voltgap, dis_pp, dis_peak, dis_rms, dis_amp_1x, dis_phase_1x, dis_amp_2x, dis_phase_2x, dis_amp_1_2x, dis_phase_1_2x,
-     dis_ampRt, dis_kurt, dis_mean, dis_skew) = ['null'] * 164
+    # 确定可计算的特征值列表
+    (vel_pass_rms, vel_low_rms, acc_rms, acc_p, vibration_impulse, acc_kurtosis, acc_skew, vel_p,
+     RF_1X, RF_2X, RF_3X, RF_4X, RF_5X, RF_1_2X, RF_1_3X, RF_1_4X, RF_1_5X, DPF_1X, DPF_2X, DPF_3X, DPF_4X, DPF_5X,
+     GDE_ratio_1X, GDE_ratio_2X, GDE_ratio_3X, GDE_ratio_4X, GDE_ratio_5X, RFE_ratio_1X, RFE_ratio_2X, RFE_ratio_3X,
+     RFE_ratio_4X, RFE_ratio_5X, RLE_ratio_1X, RLE_ratio_2X, RLE_ratio_3X, RLE_ratio_4X, RLE_ratio_5X, BPFI_1X, BPFI_2X,
+     BPFI_3X, BPFI_4X, BPFI_5X, BPFO_1X, BPFO_2X, BPFO_3X, BPFO_4X, BPFO_5X, FTF_1X, FTF_2X, FTF_3X, FTF_4X, FTF_5X,
+     BSF_1X, BSF_2X, BSF_3X, BSF_4X, BSF_5X, GMF_1X, GMF_2X, GMF_3X, GMF_4X, GMF_5X, GLE_sum_1X, GLE_sum_2X, GLE_sum_3X,
+     GLE_sum_4X, GLE_sum_5X, GUE_sum_1X, GUE_sum_2X, GUE_sum_3X, GUE_sum_4X, GUE_sum_5X, Whirl_energy_sum, BPF_1X,
+     BPF_2X, BPF_3X, BPF_4X, BPF_5X, DBPF_1X, DBPF_2X, DBPF_3X, DBPF_4X, DBPF_5X, ISE_sum, GSE_sum, EDF1_1X, EDF1_2X,
+     EDF1_3X, EDF1_4X, EDF1_5X, EDF2_1X, EDF2_2X, EDF2_3X, EDF2_4X, EDF2_5X, EDF1_ratio_1X, EDF1_ratio_2X,
+     EDF1_ratio_3X, EDF1_ratio_4X, EDF1_ratio_5X, EDF2_ratio_1X, EDF2_ratio_2X, EDF2_ratio_3X, EDF2_ratio_4X,
+     EDF2_ratio_5X, EDF1_sum, EDF2_sum, DCValues, vel_pass_rms, vel_low_rms, vel_p, DCValues, ylb_SWE, ylb_SWPE,
+     ylb_SWPA, ylb_vel_rms, ylb_kur, ylb_acc_rms, ylb_impulse, DCValues, Current_RMS, Current_PK, Current_CF,
+     Current_Power_RMS, Current_THDF, Current_Odd_THD, Current_Even_THD, Current_Pos_THD, Current_Neg_THD,
+     Current_Zero_THD, Current_Total_THD, Voltage_RMS, Voltage_PK, Voltage_CF, Voltage_Power_RMS, Voltage_THDF,
+     Voltage_Odd_THD, Voltage_Even_THD, Voltage_Pos_THD, Voltage_Neg_THD, Voltage_Zero_THD, Voltage_Total_THD,
+     Noise_RMS, Noise_PK, Noise_Kurt, Noise_Imp, dis_voltgap, dis_pp, dis_peak, dis_rms, dis_amp1x, dis_phase2x,
+     dis_phase2x, dis_amp2x, dis_phase_1_2x, dis_amp_1_2x, dis_ampRt, dis_kurt, dis_skew, dis_mean, dis_amp3x,
+     dis_amp4x, dis_amp5x, dis_amp_1_2x, dis_amp_1_4x, dis_amp_1_5x, DCValues, acc_rms, acc_peak, acc_kurt, acc_skew,
+     acc_crest, acc_shape, acc_pulse, acc_margin, hf_impulse, lf_impulse, vel_pass_rms) = ['null'] * 178
 
     eq_name, eq_code, point_name, point_code, channel_id, sensor_type, DW_type, L, N, nc, n, f0, m, Bearing_designation, \
         Manufacturer, Z, vane, G_vane, EDF1, EDF2, fc1, fb1, fc2, fb2, F_min1, F_max1, F_min2, F_max2 = parm_data
@@ -42,95 +43,109 @@ def output_template(parm_data, bearing_data):
     if sensor_type == '应力波':
         ylb_SWE, ylb_SWPE, ylb_SWPA, ylb_vel_rms, ylb_kur, ylb_acc_rms, ylb_impulse = ['v'] * 7
     if sensor_type == '加速度':
+        # 判断加速度传感器是无线还是有线
         if str(point_code)[-2:-1] not in ['X', 'Y', 'Z']:
-            vel_pass_rms, vel_low_rms, acc_rms, acc_p, vibration_impulse, acc_kurtosis, acc_skew, vel_p = ['v'] * 8
+            vel_pass_rms, vel_low_rms, acc_rms, acc_p, vibration_impulse, acc_kurtosis, acc_skew, vel_p, DCValues = [
+                                                                                                                        'v'] * 9
         elif point_code[-2:-1] in ['X', 'Y']:
             vel_pass_rms, acc_rms, acc_p, vel_p = ['v'] * 4
         elif point_code[-2:-1] in ['Z']:
             vel_pass_rms, acc_rms, acc_p, vibration_impulse, vel_p = ['v'] * 5
+        # 非应力波、N为数字或外部键相、N不为空时，得到倍频特征值
+        if sensor_type != '应力波' and (isinstance(N, float or int) or N == "外部键相") and ismy_null(N):
+            RF_1X, RF_2X, RF_3X, RF_4X, RF_5X = ['v'] * 5
+            RF_1_2X, RF_1_3X, RF_1_4X, RF_1_5X = ['v'] * 4
+        # f0不为空时，得到电机故障特征
+        if ismy_null(f0):
+            DPF_1X, DPF_2X, DPF_3X, DPF_4X, DPF_5X = ['v'] * 5
+        if ismy_null(n) and ismy_null(nc) and ismy_null(f0):
+            PPF = 'v'
+            GDE_ratio_1X, GDE_ratio_2X, GDE_ratio_3X, GDE_ratio_4X, GDE_ratio_5X = ['v'] * 5
+        if ismy_null(PPF) and ismy_null(N):
+            RFE_ratio_1X, RFE_ratio_2X, RFE_ratio_3X, RFE_ratio_4X, RFE_ratio_5X = ['v'] * 5
+        if ismy_null(PPF) and ismy_null(m):
+            RLE_ratio_1X, RLE_ratio_2X, RLE_ratio_3X, RLE_ratio_4X, RLE_ratio_5X = ['v'] * 5
+        # N不为空时且轴承型号、轴承厂家都不为空时，得到轴承故障特征
+        if ismy_null(N) and ismy_null(str(Bearing_designation)) and ismy_null(str(Manufacturer)):
+            bearing_one = bearing_data.loc[
+                (bearing_data['轴承型号'] == str(Bearing_designation).split(".")[0]) & (
+                        bearing_data['轴承厂家'] == Manufacturer)]
+            if not bearing_one.empty:
+                BPFI_1X, BPFI_2X, BPFI_3X, BPFI_4X, BPFI_5X = ['v'] * 5
+                BPFO_1X, BPFO_2X, BPFO_3X, BPFO_4X, BPFO_5X = ['v'] * 5
+                FTF_1X, FTF_2X, FTF_3X, FTF_4X, FTF_5X = ['v'] * 5
+                BSF_1X, BSF_2X, BSF_3X, BSF_4X, BSF_5X = ['v'] * 5
+        # N不为空时且Z不为空时，得到齿轮故障特征
+        if ismy_null(N) and ismy_null(Z):
+            GMF_1X, GMF_2X, GMF_3X, GMF_4X, GMF_5X = ['v'] * 5
+            GLE_sum_1X, GLE_sum_2X, GLE_sum_3X, GLE_sum_4X, GLE_sum_5X = ['v'] * 5
+            GUE_sum_1X, GUE_sum_2X, GUE_sum_3X, GUE_sum_4X, GUE_sum_5X = ['v'] * 5
+        # N不为空时且vane不为空时，得到叶片故障特征（其他故障特征）
+        if ismy_null(N) and ismy_null(vane):
+            BPF_1X, BPF_2X, BPF_3X, BPF_4X, BPF_5X = ['v'] * 5
+            ISE_sum = "v"
+        if ismy_null(N) and ismy_null(G_vane):
+            DBPF_1X, DBPF_2X, DBPF_3X, DBPF_4X, DBPF_5X = ['v'] * 5
+            GSE_sum = "v"
+        if ismy_null(N) and Bearing_designation == "滑动轴承":
+            Whirl_energy_sum = "v"
+        # EDF1不为空时，得到自定义故障特征
+        if ismy_null(EDF1):
+            EDF1_1X, EDF1_2X, EDF1_3X, EDF1_4X, EDF1_5X = ['v'] * 5
+        if ismy_null(EDF2):
+            EDF2_1X, EDF2_2X, EDF2_3X, EDF2_4X, EDF2_5X = ['v'] * 5
+        if ismy_null(fc1) and ismy_null(fb1):
+            EDF1_ratio_1X, EDF1_ratio_2X, EDF1_ratio_3X, EDF1_ratio_4X, EDF1_ratio_5X = ['v'] * 5
+        if ismy_null(fc2) and ismy_null(fb2):
+            EDF2_ratio_1X, EDF2_ratio_2X, EDF2_ratio_3X, EDF2_ratio_4X, EDF2_ratio_5X = ['v'] * 5
+        if ismy_null(F_min1) and ismy_null(F_max1):
+            EDF1_sum = "v"
+        if ismy_null(F_min2) and ismy_null(F_max2):
+            EDF2_sum = "v"
     elif sensor_type == '速度':
         vel_pass_rms, vel_low_rms, vel_p = ['v'] * 3
-    elif sensor_type == '位移':
-        max_positive_p, max_negative_p, mon_pp, dia_pp, peak, peaking_factor, de_p, ave_axi_disp = ['v'] * 8
     elif sensor_type == '电流谱':
-        Current_RMS, Current_PK, Current_CF, Current_Power_RMS, Current_THDF, Current_Odd_THD, Current_Even_THD, Current_Pos_THD, Current_Neg_THD, Current_Zero_THD, Current_Total_THD = ['v'] * 11
+        (Current_RMS, Current_PK, Current_CF, Current_Power_RMS, Current_THDF, Current_Odd_THD, Current_Even_THD,
+         Current_Pos_THD, Current_Neg_THD, Current_Zero_THD, Current_Total_THD) = ['v'] * 11
     elif sensor_type == '电压谱':
-        Voltage_RMS, Voltage_PK, Voltage_CF, Voltage_Power_RMS, Voltage_THDF, Voltage_Odd_THD, Voltage_Even_THD, Voltage_Pos_THD, Voltage_Neg_THD, Voltage_Zero_THD, Voltage_Total_THD = ['v'] * 11
+        (Voltage_RMS, Voltage_PK, Voltage_CF, Voltage_Power_RMS, Voltage_THDF, Voltage_Odd_THD, Voltage_Even_THD,
+         Voltage_Pos_THD, Voltage_Neg_THD, Voltage_Zero_THD, Voltage_Total_THD) = ['v'] * 11
     elif sensor_type == '电压谱':
-        Voltage_RMS, Voltage_PK, Voltage_CF, Voltage_Power_RMS, Voltage_THDF, Voltage_Odd_THD, Voltage_Even_THD, Voltage_Pos_THD, Voltage_Neg_THD, Voltage_Zero_THD, Voltage_Total_THD = ['v'] * 11
+        (Voltage_RMS, Voltage_PK, Voltage_CF, Voltage_Power_RMS, Voltage_THDF, Voltage_Odd_THD, Voltage_Even_THD,
+         Voltage_Pos_THD, Voltage_Neg_THD, Voltage_Zero_THD, Voltage_Total_THD) = ['v'] * 11
     elif sensor_type == '声音':
         Noise_RMS, Noise_PK, Noise_Kurt, Noise_Imp = ['v'] * 4
     elif sensor_type == '径向位移':
-        dis_voltgap, dis_pp, dis_peak, dis_rms, dis_amp_1x, dis_phase_1x, dis_amp_2x, dis_phase_2x, dis_amp_1_2x, dis_phase_1_2x, dis_ampRt, dis_kurt, dis_skew = ['v'] * 13
+        (dis_voltgap, dis_pp, dis_peak, dis_rms, dis_amp1x, dis_phase2x, dis_phase2x, dis_amp2x, dis_phase_1_2x,
+         dis_amp_1_2x, dis_ampRt, dis_kurt, dis_skew, dis_amp3x, dis_amp4x, dis_amp5x, dis_amp_1_2x, dis_amp_1_4x,
+         dis_amp_1_5x) = ['v'] * 19
     elif sensor_type == '轴向位移':
         dis_mean = ['v'] * 1
+    elif sensor_type == '冲击脉冲':
+        (acc_rms, acc_peak, acc_kurt, acc_skew, acc_crest, acc_shape, acc_pulse, acc_margin, hf_impulse, lf_impulse,
+         vel_pass_rms) = ['v'] * 11
 
-    if ismy_null(f0):
-        DPF_1X, DPF_2X, DPF_3X, DPF_4X, DPF_5X = ['v'] * 5
-    if sensor_type != '应力波' and (isinstance(N, float) or isinstance(N, int) or N == "外部键相") and ismy_null(N):
-        RF_1X, RF_2X, RF_3X, RF_4X, RF_5X = ['v'] * 5
-        RF_1_2X, RF_1_3X, RF_1_4X, RF_1_5X = ['v'] * 4
-
-    if ismy_null(N) and ismy_null(Z):
-        GMF_1X, GMF_2X, GMF_3X, GMF_4X, GMF_5X = ['v'] * 5
-        GLE_sum_1X, GLE_sum_2X, GLE_sum_3X, GLE_sum_4X, GLE_sum_5X = ['v'] * 5
-        GUE_sum_1X, GUE_sum_2X, GUE_sum_3X, GUE_sum_4X, GUE_sum_5X = ['v'] * 5
-    if ismy_null(N) and ismy_null(vane):
-        BPF_1X, BPF_2X, BPF_3X, BPF_4X, BPF_5X = ['v'] * 5
-        ISE_sum = "v"
-    if ismy_null(N) and ismy_null(G_vane):
-        DBPF_1X, DBPF_2X, DBPF_3X, DBPF_4X, DBPF_5X = ['v'] * 5
-        GSE_sum = "v"
-    if ismy_null(N) and Bearing_designation == "滑动轴承":
-        Whirl_energy_sum = "v"
-    if ismy_null(N) and ismy_null(str(Bearing_designation)) and ismy_null(str(Manufacturer)):
-        bearing_one = bearing_data.loc[
-            (bearing_data['轴承型号'] == str(Bearing_designation).split(".")[0]) & (bearing_data['轴承厂家'] == Manufacturer)]
-        if not bearing_one.empty:
-            BPFI_1X, BPFI_2X, BPFI_3X, BPFI_4X, BPFI_5X = ['v'] * 5
-            BPFO_1X, BPFO_2X, BPFO_3X, BPFO_4X, BPFO_5X = ['v'] * 5
-            FTF_1X, FTF_2X, FTF_3X, FTF_4X, FTF_5X = ['v'] * 5
-            BSF_1X, BSF_2X, BSF_3X, BSF_4X, BSF_5X = ['v'] * 5
-    if ismy_null(EDF1):
-        EDF1_1X, EDF1_2X, EDF1_3X, EDF1_4X, EDF1_5X = ['v'] * 5
-    if ismy_null(EDF2):
-        EDF2_1X, EDF2_2X, EDF2_3X, EDF2_4X, EDF2_5X = ['v'] * 5
-    if ismy_null(fc1) and ismy_null(fb1):
-        EDF1_ratio_1X, EDF1_ratio_2X, EDF1_ratio_3X, EDF1_ratio_4X, EDF1_ratio_5X = ['v'] * 5
-    if ismy_null(fc2) and ismy_null(fb2):
-        EDF2_ratio_1X, EDF2_ratio_2X, EDF2_ratio_3X, EDF2_ratio_4X, EDF2_ratio_5X = ['v'] * 5
-    if ismy_null(F_min1) and ismy_null(F_max1):
-        EDF1_sum = "v"
-    if ismy_null(F_min2) and ismy_null(F_max2):
-        EDF2_sum = "v"
-    if ismy_null(n) and ismy_null(nc) and ismy_null(f0):
-        PPF = 'v'
-        GDE_ratio_1X, GDE_ratio_2X, GDE_ratio_3X, GDE_ratio_4X, GDE_ratio_5X = ['v'] * 5
-    if ismy_null(PPF) and ismy_null(N):
-        RFE_ratio_1X, RFE_ratio_2X, RFE_ratio_3X, RFE_ratio_4X, RFE_ratio_5X = ['v'] * 5
-    if ismy_null(PPF) and ismy_null(m):
-        RLE_ratio_1X, RLE_ratio_2X, RLE_ratio_3X, RLE_ratio_4X, RLE_ratio_5X = ['v'] * 5
-
-    res_type = [ylb_SWE, ylb_SWPE, ylb_SWPA, ylb_vel_rms, ylb_kur, ylb_acc_rms, ylb_impulse,
-                vel_pass_rms, vel_low_rms, acc_rms, acc_p, vibration_impulse,
-                acc_kurtosis, acc_skew, vel_p, max_positive_p, max_negative_p, mon_pp, dia_pp, peak, peaking_factor,
-                de_p, ave_axi_disp, RF_1X, RF_2X, RF_3X, RF_4X, RF_5X, RF_1_2X, RF_1_3X, RF_1_4X, RF_1_5X, DPF_1X,
-                DPF_2X, DPF_3X, DPF_4X, DPF_5X, GDE_ratio_1X, GDE_ratio_2X, GDE_ratio_3X, GDE_ratio_4X, GDE_ratio_5X,
-                RFE_ratio_1X, RFE_ratio_2X, RFE_ratio_3X, RFE_ratio_4X, RFE_ratio_5X, RLE_ratio_1X, RLE_ratio_2X,
-                RLE_ratio_3X, RLE_ratio_4X, RLE_ratio_5X, BPFI_1X, BPFI_2X, BPFI_3X, BPFI_4X, BPFI_5X, BPFO_1X,
-                BPFO_2X, BPFO_3X, BPFO_4X, BPFO_5X, FTF_1X, FTF_2X, FTF_3X, FTF_4X, FTF_5X, BSF_1X, BSF_2X, BSF_3X,
-                BSF_4X, BSF_5X, GMF_1X, GMF_2X, GMF_3X, GMF_4X, GMF_5X, GLE_sum_1X, GLE_sum_2X, GLE_sum_3X,
-                GLE_sum_4X, GLE_sum_5X, GUE_sum_1X, GUE_sum_2X, GUE_sum_3X, GUE_sum_4X, GUE_sum_5X, Whirl_energy_sum,
-                BPF_1X, BPF_2X, BPF_3X, BPF_4X, BPF_5X, DBPF_1X, DBPF_2X, DBPF_3X, DBPF_4X, DBPF_5X, ISE_sum, GSE_sum,
-                EDF1_1X, EDF1_2X, EDF1_3X, EDF1_4X, EDF1_5X, EDF2_1X, EDF2_2X, EDF2_3X, EDF2_4X, EDF2_5X, EDF1_ratio_1X,
-                EDF1_ratio_2X, EDF1_ratio_3X, EDF1_ratio_4X, EDF1_ratio_5X, EDF2_ratio_1X, EDF2_ratio_2X, EDF2_ratio_3X,
-                EDF2_ratio_4X, EDF2_ratio_5X, EDF1_sum, EDF2_sum, DCValues, TemValues,
-                Current_RMS, Current_PK, Current_CF, Current_Power_RMS, Current_THDF, Current_Odd_THD, Current_Even_THD,
-                Current_Pos_THD, Current_Neg_THD, Current_Zero_THD, Current_Total_THD,
-                Voltage_RMS, Voltage_PK, Voltage_CF, Voltage_Power_RMS, Voltage_THDF, Voltage_Odd_THD, Voltage_Even_THD,
-                Voltage_Pos_THD, Voltage_Neg_THD, Voltage_Zero_THD, Voltage_Total_THD,  Noise_RMS, Noise_PK, Noise_Kurt,
-                Noise_Imp, dis_voltgap, dis_pp, dis_peak, dis_rms, dis_amp_1x, dis_phase_1x, dis_amp_2x, dis_phase_2x,
-                dis_amp_1_2x, dis_phase_1_2x, dis_ampRt, dis_kurt, dis_mean, dis_skew]
+    res_type = [vel_pass_rms, vel_low_rms, acc_rms, acc_p, vibration_impulse, acc_kurtosis, acc_skew, vel_p,
+                RF_1X, RF_2X, RF_3X, RF_4X, RF_5X, RF_1_2X, RF_1_3X, RF_1_4X, RF_1_5X, DPF_1X, DPF_2X, DPF_3X, DPF_4X,
+                DPF_5X, GDE_ratio_1X, GDE_ratio_2X, GDE_ratio_3X, GDE_ratio_4X, GDE_ratio_5X, RFE_ratio_1X,
+                RFE_ratio_2X, RFE_ratio_3X, RFE_ratio_4X, RFE_ratio_5X, RLE_ratio_1X, RLE_ratio_2X, RLE_ratio_3X,
+                RLE_ratio_4X, RLE_ratio_5X, BPFI_1X, BPFI_2X, BPFI_3X, BPFI_4X, BPFI_5X, BPFO_1X, BPFO_2X, BPFO_3X,
+                BPFO_4X, BPFO_5X, FTF_1X, FTF_2X, FTF_3X, FTF_4X, FTF_5X, BSF_1X, BSF_2X, BSF_3X, BSF_4X, BSF_5X,
+                GMF_1X, GMF_2X, GMF_3X, GMF_4X, GMF_5X, GLE_sum_1X, GLE_sum_2X, GLE_sum_3X, GLE_sum_4X, GLE_sum_5X,
+                GUE_sum_1X, GUE_sum_2X, GUE_sum_3X, GUE_sum_4X, GUE_sum_5X, Whirl_energy_sum, BPF_1X, BPF_2X, BPF_3X,
+                BPF_4X, BPF_5X, DBPF_1X, DBPF_2X, DBPF_3X, DBPF_4X, DBPF_5X, ISE_sum, GSE_sum, EDF1_1X, EDF1_2X,
+                EDF1_3X, EDF1_4X, EDF1_5X, EDF2_1X, EDF2_2X, EDF2_3X, EDF2_4X, EDF2_5X, EDF1_ratio_1X, EDF1_ratio_2X,
+                EDF1_ratio_3X, EDF1_ratio_4X, EDF1_ratio_5X, EDF2_ratio_1X, EDF2_ratio_2X, EDF2_ratio_3X, EDF2_ratio_4X,
+                EDF2_ratio_5X, EDF1_sum, EDF2_sum, DCValues, vel_pass_rms, vel_low_rms, vel_p, DCValues, ylb_SWE,
+                ylb_SWPE, ylb_SWPA, ylb_vel_rms, ylb_kur, ylb_acc_rms, ylb_impulse, DCValues, Current_RMS, Current_PK,
+                Current_CF, Current_Power_RMS, Current_THDF, Current_Odd_THD, Current_Even_THD, Current_Pos_THD,
+                Current_Neg_THD, Current_Zero_THD, Current_Total_THD, Voltage_RMS, Voltage_PK, Voltage_CF,
+                Voltage_Power_RMS, Voltage_THDF, Voltage_Odd_THD, Voltage_Even_THD, Voltage_Pos_THD, Voltage_Neg_THD,
+                Voltage_Zero_THD, Voltage_Total_THD, Noise_RMS, Noise_PK, Noise_Kurt, Noise_Imp, dis_voltgap, dis_pp,
+                dis_peak, dis_rms, dis_amp1x, dis_phase2x, dis_phase2x, dis_amp2x, dis_phase_1_2x, dis_amp_1_2x,
+                dis_ampRt, dis_kurt, dis_skew, dis_mean, dis_amp3x, dis_amp4x, dis_amp5x, dis_amp_1_2x, dis_amp_1_4x,
+                dis_amp_1_5x, DCValues, acc_rms, acc_peak, acc_kurt,  acc_skew, acc_crest, acc_shape, acc_pulse,
+                acc_margin, hf_impulse, lf_impulse, vel_pass_rms]
     return res_type
 
 
@@ -174,6 +189,7 @@ def output_template_all(excel_path, my_deftable, output_path, need_channel_id=Tr
     value_name = list(template_dataframe['数据项（特征）名称'])
     value_code = list(template_dataframe['数据项代号'])
     value_fea_type = list(template_dataframe['数据项（特征）类型'])
+    print(value_fea_type)
     value_type = list(template_dataframe['数据类型'])
     value_unit = list(template_dataframe['单位'])
     tmp_data = []
@@ -195,7 +211,7 @@ def output_template_all(excel_path, my_deftable, output_path, need_channel_id=Tr
             tmp_data.append(
                 [eq_name, eq_code, point_name, point_code, sensor_type, '偏置电压',
                  str(point_code) + '999', '时域特征', '模拟量', 'V', channel_id])
-        elif sensor_type == "位移":
+        elif sensor_type == "冲击脉冲":
             tmp_data.append(
                 [eq_name, eq_code, point_name, point_code, sensor_type, '偏置电压',
                  str(point_code) + '999', '时域特征', '模拟量', 'V', channel_id])
@@ -221,16 +237,14 @@ def output_template_all(excel_path, my_deftable, output_path, need_channel_id=Tr
     # 自适应列宽实现
     def excel_widths(excel_dataframe):
         # 计算表头的字符宽度
-        column_widths = (
-                            excel_dataframe.columns.to_series()
-                            .apply(lambda x: len(x.encode('utf-8'))).values
-                        ) * 0.8
+        column_widths = (excel_dataframe.columns.to_series()
+                         .apply(lambda x: len(x.encode('utf-8'))).values
+                         ) * 0.8
         #  计算每列的最大字符宽度
-        max_widths = (
-                         excel_dataframe.astype(str)
-                         .applymap(lambda x: len(x.encode('utf-8')))
-                         .agg(max).values
-                     ) * 0.8
+        max_widths = (excel_dataframe.astype(str)
+                      .applymap(lambda x: len(x.encode('utf-8')))
+                      .agg(max).values
+                      ) * 0.8
         # 计算整体最大宽度
         widths = np.max([column_widths, max_widths], axis=0)
         return widths
@@ -273,4 +287,3 @@ if __name__ == "__main__":
     output_template_all(r"H:\chaos项目资料\特征解析工具汇编\测试文件\data_all(模板).xlsx",
                         r"后台文件\my_def_对应注释.xlsx",
                         r"H:\chaos项目资料\特征解析工具汇编\测试文件\data_all - 平台导入表(电流电压).xlsx", False)
-
