@@ -46,62 +46,63 @@ def output_template(parm_data, bearing_data):
     if sensor_type == '加速度':
         # 判断加速度传感器是无线还是有线
         if str(point_code)[-2:-1] not in ['X', 'Y', 'Z']:
-            vel_pass_rms, vel_low_rms, acc_rms, acc_p, vibration_impulse, acc_kurtosis, acc_skew, vel_p, DCValues_acc = ['v'] * 9
-            # 非应力波、N为数字或外部键相、N不为空时，得到倍频特征值
-            if sensor_type != '应力波' and (isinstance(N, float or int) or N == "外部键相") and ismy_null(N):
-                RF_1X, RF_2X, RF_3X, RF_4X, RF_5X = ['v'] * 5
-                RF_1_2X, RF_1_3X, RF_1_4X, RF_1_5X = ['v'] * 4
-            # f0不为空时，得到电机故障特征
-            if ismy_null(f0):
-                DPF_1X, DPF_2X, DPF_3X, DPF_4X, DPF_5X = ['v'] * 5
-            if ismy_null(n) and ismy_null(nc) and ismy_null(f0):
-                PPF = 'v'
-                GDE_ratio_1X, GDE_ratio_2X, GDE_ratio_3X, GDE_ratio_4X, GDE_ratio_5X = ['v'] * 5
-            if ismy_null(PPF) and ismy_null(N):
-                RFE_ratio_1X, RFE_ratio_2X, RFE_ratio_3X, RFE_ratio_4X, RFE_ratio_5X = ['v'] * 5
-            if ismy_null(PPF) and ismy_null(m):
-                RLE_ratio_1X, RLE_ratio_2X, RLE_ratio_3X, RLE_ratio_4X, RLE_ratio_5X = ['v'] * 5
-            # N不为空时且轴承型号、轴承厂家都不为空时，得到轴承故障特征
-            if ismy_null(N) and ismy_null(str(Bearing_designation)) and ismy_null(str(Manufacturer)):
-                bearing_one = bearing_data.loc[
-                    (bearing_data['轴承型号'] == str(Bearing_designation).split(".")[0]) & (
-                            bearing_data['轴承厂家'] == Manufacturer)]
-                if not bearing_one.empty:
-                    BPFI_1X, BPFI_2X, BPFI_3X, BPFI_4X, BPFI_5X = ['v'] * 5
-                    BPFO_1X, BPFO_2X, BPFO_3X, BPFO_4X, BPFO_5X = ['v'] * 5
-                    FTF_1X, FTF_2X, FTF_3X, FTF_4X, FTF_5X = ['v'] * 5
-                    BSF_1X, BSF_2X, BSF_3X, BSF_4X, BSF_5X = ['v'] * 5
-            # N不为空时且Z不为空时，得到齿轮故障特征
-            if ismy_null(N) and ismy_null(Z):
-                GMF_1X, GMF_2X, GMF_3X, GMF_4X, GMF_5X = ['v'] * 5
-                GLE_sum_1X, GLE_sum_2X, GLE_sum_3X, GLE_sum_4X, GLE_sum_5X = ['v'] * 5
-                GUE_sum_1X, GUE_sum_2X, GUE_sum_3X, GUE_sum_4X, GUE_sum_5X = ['v'] * 5
-            # N不为空时且vane不为空时，得到叶片故障特征（其他故障特征）
-            if ismy_null(N) and ismy_null(vane):
-                BPF_1X, BPF_2X, BPF_3X, BPF_4X, BPF_5X = ['v'] * 5
-                ISE_sum = "v"
-            if ismy_null(N) and ismy_null(G_vane):
-                DBPF_1X, DBPF_2X, DBPF_3X, DBPF_4X, DBPF_5X = ['v'] * 5
-                GSE_sum = "v"
-            if ismy_null(N) and Bearing_designation == "滑动轴承":
-                Whirl_energy_sum = "v"
-            # EDF1不为空时，得到自定义故障特征
-            if ismy_null(EDF1):
-                EDF1_1X, EDF1_2X, EDF1_3X, EDF1_4X, EDF1_5X = ['v'] * 5
-            if ismy_null(EDF2):
-                EDF2_1X, EDF2_2X, EDF2_3X, EDF2_4X, EDF2_5X = ['v'] * 5
-            if ismy_null(fc1) and ismy_null(fb1):
-                EDF1_ratio_1X, EDF1_ratio_2X, EDF1_ratio_3X, EDF1_ratio_4X, EDF1_ratio_5X = ['v'] * 5
-            if ismy_null(fc2) and ismy_null(fb2):
-                EDF2_ratio_1X, EDF2_ratio_2X, EDF2_ratio_3X, EDF2_ratio_4X, EDF2_ratio_5X = ['v'] * 5
-            if ismy_null(F_min1) and ismy_null(F_max1):
-                EDF1_sum = "v"
-            if ismy_null(F_min2) and ismy_null(F_max2):
-                EDF2_sum = "v"
+            vel_pass_rms, vel_low_rms, acc_rms, acc_p, vibration_impulse, acc_kurtosis, acc_skew, vel_p, DCValues_acc = [
+                                                                                                                            'v'] * 9
         elif point_code[-2:-1] in ['X', 'Y']:
             vel_pass_rms, acc_rms, acc_p, vel_p = ['v'] * 4
         elif point_code[-2:-1] in ['Z']:
             vel_pass_rms, acc_rms, acc_p, vibration_impulse, vel_p = ['v'] * 5
+        # 非应力波、N为数字或外部键相、N不为空时，得到倍频特征值
+        if sensor_type != '应力波' and (isinstance(N, float or int) or N == "外部键相") and ismy_null(N):
+            RF_1X, RF_2X, RF_3X, RF_4X, RF_5X = ['v'] * 5
+            RF_1_2X, RF_1_3X, RF_1_4X, RF_1_5X = ['v'] * 4
+        # f0不为空时，得到电机故障特征
+        if ismy_null(f0):
+            DPF_1X, DPF_2X, DPF_3X, DPF_4X, DPF_5X = ['v'] * 5
+        if ismy_null(n) and ismy_null(nc) and ismy_null(f0):
+            PPF = 'v'
+            GDE_ratio_1X, GDE_ratio_2X, GDE_ratio_3X, GDE_ratio_4X, GDE_ratio_5X = ['v'] * 5
+        if ismy_null(PPF) and ismy_null(N):
+            RFE_ratio_1X, RFE_ratio_2X, RFE_ratio_3X, RFE_ratio_4X, RFE_ratio_5X = ['v'] * 5
+        if ismy_null(PPF) and ismy_null(m):
+            RLE_ratio_1X, RLE_ratio_2X, RLE_ratio_3X, RLE_ratio_4X, RLE_ratio_5X = ['v'] * 5
+        # N不为空时且轴承型号、轴承厂家都不为空时，得到轴承故障特征
+        if ismy_null(N) and ismy_null(str(Bearing_designation)) and ismy_null(str(Manufacturer)):
+            bearing_one = bearing_data.loc[
+                (bearing_data['轴承型号'] == str(Bearing_designation).split(".")[0]) & (
+                        bearing_data['轴承厂家'] == Manufacturer)]
+            if not bearing_one.empty:
+                BPFI_1X, BPFI_2X, BPFI_3X, BPFI_4X, BPFI_5X = ['v'] * 5
+                BPFO_1X, BPFO_2X, BPFO_3X, BPFO_4X, BPFO_5X = ['v'] * 5
+                FTF_1X, FTF_2X, FTF_3X, FTF_4X, FTF_5X = ['v'] * 5
+                BSF_1X, BSF_2X, BSF_3X, BSF_4X, BSF_5X = ['v'] * 5
+        # N不为空时且Z不为空时，得到齿轮故障特征
+        if ismy_null(N) and ismy_null(Z):
+            GMF_1X, GMF_2X, GMF_3X, GMF_4X, GMF_5X = ['v'] * 5
+            GLE_sum_1X, GLE_sum_2X, GLE_sum_3X, GLE_sum_4X, GLE_sum_5X = ['v'] * 5
+            GUE_sum_1X, GUE_sum_2X, GUE_sum_3X, GUE_sum_4X, GUE_sum_5X = ['v'] * 5
+        # N不为空时且vane不为空时，得到叶片故障特征（其他故障特征）
+        if ismy_null(N) and ismy_null(vane):
+            BPF_1X, BPF_2X, BPF_3X, BPF_4X, BPF_5X = ['v'] * 5
+            ISE_sum = "v"
+        if ismy_null(N) and ismy_null(G_vane):
+            DBPF_1X, DBPF_2X, DBPF_3X, DBPF_4X, DBPF_5X = ['v'] * 5
+            GSE_sum = "v"
+        if ismy_null(N) and Bearing_designation == "滑动轴承":
+            Whirl_energy_sum = "v"
+        # EDF1不为空时，得到自定义故障特征
+        if ismy_null(EDF1):
+            EDF1_1X, EDF1_2X, EDF1_3X, EDF1_4X, EDF1_5X = ['v'] * 5
+        if ismy_null(EDF2):
+            EDF2_1X, EDF2_2X, EDF2_3X, EDF2_4X, EDF2_5X = ['v'] * 5
+        if ismy_null(fc1) and ismy_null(fb1):
+            EDF1_ratio_1X, EDF1_ratio_2X, EDF1_ratio_3X, EDF1_ratio_4X, EDF1_ratio_5X = ['v'] * 5
+        if ismy_null(fc2) and ismy_null(fb2):
+            EDF2_ratio_1X, EDF2_ratio_2X, EDF2_ratio_3X, EDF2_ratio_4X, EDF2_ratio_5X = ['v'] * 5
+        if ismy_null(F_min1) and ismy_null(F_max1):
+            EDF1_sum = "v"
+        if ismy_null(F_min2) and ismy_null(F_max2):
+            EDF2_sum = "v"
     elif sensor_type == '速度':
         vel_pass_rms_sudu, vel_low_rms_sudu, vel_p_sudu = ['v'] * 3
     elif sensor_type == '电流谱':
