@@ -42,7 +42,7 @@ def device_info(file1, file2, file4):
     sensor_list = []
     for index, series in df4.iterrows():
         if series['测点（通道）类型'] in ['加速度', "应力波", "位移", '速度', '温度', '电流谱', '电压谱', '声音',
-                                        '径向位移', '轴向位移']:
+                                        '径向位移', '轴向位移', '转速']:
             # 筛选出需要的行
             equipname_list.append(series['设备名称'])
             equipcod_list.append(series['设备编码'])
@@ -60,6 +60,7 @@ def device_info(file1, file2, file4):
                 else 'VELOCITY' if series['测点（通道）类型'] == '速度'
                 else 'DISPLACEMENT' if series['测点（通道）类型'] == '位移'
                 else 'TEMPERATURE' if series['测点（通道）类型'] == '温度'
+                else 'SPEED' if series['测点（通道）类型'] == '转速'
                 else 'Unknown')
 
     df_deviceinfo = pd.DataFrame(
