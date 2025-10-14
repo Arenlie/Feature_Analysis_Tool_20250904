@@ -25,15 +25,16 @@ def output_template(parm_data, bearing_data):
      BPF_2X, BPF_3X, BPF_4X, BPF_5X, DBPF_1X, DBPF_2X, DBPF_3X, DBPF_4X, DBPF_5X, ISE_sum, GSE_sum, EDF1_1X, EDF1_2X,
      EDF1_3X, EDF1_4X, EDF1_5X, EDF2_1X, EDF2_2X, EDF2_3X, EDF2_4X, EDF2_5X, EDF1_ratio_1X, EDF1_ratio_2X,
      EDF1_ratio_3X, EDF1_ratio_4X, EDF1_ratio_5X, EDF2_ratio_1X, EDF2_ratio_2X, EDF2_ratio_3X, EDF2_ratio_4X,
-     EDF2_ratio_5X, EDF1_sum, EDF2_sum, DCValues, vel_pass_rms, vel_low_rms, vel_p, DCValues, ylb_SWE, ylb_SWPE,
-     ylb_SWPA, ylb_vel_rms, ylb_kur, ylb_acc_rms, ylb_impulse, DCValues, Current_RMS, Current_PK, Current_CF,
-     Current_Power_RMS, Current_THDF, Current_Odd_THD, Current_Even_THD, Current_Pos_THD, Current_Neg_THD,
+     EDF2_ratio_5X, EDF1_sum, EDF2_sum, DCValues_acc, vel_pass_rms_sudu, vel_low_rms_sudu, vel_p_sudu, DCValues_temp,
+     ylb_SWE, ylb_SWPE, ylb_SWPA, ylb_vel_rms, ylb_kur, ylb_acc_rms, ylb_impulse, DCValues_ylb, Current_RMS, Current_PK,
+     Current_CF, Current_Power_RMS, Current_THDF, Current_Odd_THD, Current_Even_THD, Current_Pos_THD, Current_Neg_THD,
      Current_Zero_THD, Current_Total_THD, Voltage_RMS, Voltage_PK, Voltage_CF, Voltage_Power_RMS, Voltage_THDF,
      Voltage_Odd_THD, Voltage_Even_THD, Voltage_Pos_THD, Voltage_Neg_THD, Voltage_Zero_THD, Voltage_Total_THD,
      Noise_RMS, Noise_PK, Noise_Kurt, Noise_Imp, dis_voltgap, dis_pp, dis_peak, dis_rms, dis_amp1x, dis_phase2x,
      dis_phase2x, dis_amp2x, dis_phase_1_2x, dis_amp_1_2x, dis_ampRt, dis_kurt, dis_skew, dis_mean, dis_amp3x,
-     dis_amp4x, dis_amp5x, dis_amp_1_2x, dis_amp_1_4x, dis_amp_1_5x, DCValues, acc_rms, acc_peak, acc_kurt, acc_skew,
-     acc_crest, acc_shape, acc_pulse, acc_margin, hf_impulse, lf_impulse, vel_pass_rms) = ['null'] * 178
+     dis_amp4x, dis_amp5x, dis_amp_1_2x, dis_amp_1_4x, dis_amp_1_5x, DCValues_mc, acc_rms_mc, acc_peak_mc, acc_kurt_mc,
+     acc_skew_mc, acc_crest_mc, acc_shape_mc, acc_pulse_mc, acc_margin_mc, hf_impulse_mc, lf_impulse_mc,
+     vel_pass_rms_mc, speed) = ['null'] * 179
 
     eq_name, eq_code, point_name, point_code, channel_id, sensor_type, DW_type, L, N, nc, n, f0, m, Bearing_designation, \
         Manufacturer, Z, vane, G_vane, EDF1, EDF2, fc1, fb1, fc2, fb2, F_min1, F_max1, F_min2, F_max2 = parm_data
@@ -41,12 +42,12 @@ def output_template(parm_data, bearing_data):
     PPF = "/"
 
     if sensor_type == '应力波':
-        ylb_SWE, ylb_SWPE, ylb_SWPA, ylb_vel_rms, ylb_kur, ylb_acc_rms, ylb_impulse = ['v'] * 7
+        ylb_SWE, ylb_SWPE, ylb_SWPA, ylb_vel_rms, ylb_kur, ylb_acc_rms, ylb_impulse, DCValues_ylb = ['v'] * 8
     if sensor_type == '加速度':
         # 判断加速度传感器是无线还是有线
         if str(point_code)[-2:-1] not in ['X', 'Y', 'Z']:
-            vel_pass_rms, vel_low_rms, acc_rms, acc_p, vibration_impulse, acc_kurtosis, acc_skew, vel_p, DCValues = [
-                                                                                                                        'v'] * 9
+            vel_pass_rms, vel_low_rms, acc_rms, acc_p, vibration_impulse, acc_kurtosis, acc_skew, vel_p, DCValues_acc = [
+                                                                                                                            'v'] * 9
         elif point_code[-2:-1] in ['X', 'Y']:
             vel_pass_rms, acc_rms, acc_p, vel_p = ['v'] * 4
         elif point_code[-2:-1] in ['Z']:
@@ -103,7 +104,7 @@ def output_template(parm_data, bearing_data):
         if ismy_null(F_min2) and ismy_null(F_max2):
             EDF2_sum = "v"
     elif sensor_type == '速度':
-        vel_pass_rms, vel_low_rms, vel_p = ['v'] * 3
+        vel_pass_rms_sudu, vel_low_rms_sudu, vel_p_sudu = ['v'] * 3
     elif sensor_type == '电流谱':
         (Current_RMS, Current_PK, Current_CF, Current_Power_RMS, Current_THDF, Current_Odd_THD, Current_Even_THD,
          Current_Pos_THD, Current_Neg_THD, Current_Zero_THD, Current_Total_THD) = ['v'] * 11
@@ -122,35 +123,37 @@ def output_template(parm_data, bearing_data):
     elif sensor_type == '轴向位移':
         dis_mean = ['v'] * 1
     elif sensor_type == '冲击脉冲':
-        (acc_rms, acc_peak, acc_kurt, acc_skew, acc_crest, acc_shape, acc_pulse, acc_margin, hf_impulse, lf_impulse,
-         vel_pass_rms) = ['v'] * 11
+        (acc_rms_mc, acc_peak_mc, acc_kurt_mc, acc_skew_mc, acc_crest_mc, acc_shape_mc, acc_pulse_mc, acc_margin_mc,
+         hf_impulse_mc, lf_impulse_mc,
+         vel_pass_rms_mc, DCValues_mc) = ['v'] * 12
+    elif sensor_type == '温度':
+        DCValues_temp = ['v']* 1
+    elif sensor_type == '转速':
+        speed = ['v'] * 1
 
     res_type = [vel_pass_rms, vel_low_rms, acc_rms, acc_p, vibration_impulse, acc_kurtosis, acc_skew, vel_p,
                 RF_1X, RF_2X, RF_3X, RF_4X, RF_5X, RF_1_2X, RF_1_3X, RF_1_4X, RF_1_5X, DPF_1X, DPF_2X, DPF_3X, DPF_4X,
-                DPF_5X, GDE_ratio_1X, GDE_ratio_2X, GDE_ratio_3X, GDE_ratio_4X, GDE_ratio_5X, RFE_ratio_1X,
-                RFE_ratio_2X, RFE_ratio_3X, RFE_ratio_4X, RFE_ratio_5X, RLE_ratio_1X, RLE_ratio_2X, RLE_ratio_3X,
-                RLE_ratio_4X, RLE_ratio_5X, BPFI_1X, BPFI_2X, BPFI_3X, BPFI_4X, BPFI_5X, BPFO_1X, BPFO_2X, BPFO_3X,
-                BPFO_4X, BPFO_5X, FTF_1X, FTF_2X, FTF_3X, FTF_4X, FTF_5X, BSF_1X, BSF_2X, BSF_3X, BSF_4X, BSF_5X,
-                GMF_1X, GMF_2X, GMF_3X, GMF_4X, GMF_5X, GLE_sum_1X, GLE_sum_2X, GLE_sum_3X, GLE_sum_4X, GLE_sum_5X,
-                GUE_sum_1X, GUE_sum_2X, GUE_sum_3X, GUE_sum_4X, GUE_sum_5X, Whirl_energy_sum, BPF_1X, BPF_2X, BPF_3X,
-                BPF_4X, BPF_5X, DBPF_1X, DBPF_2X, DBPF_3X, DBPF_4X, DBPF_5X, ISE_sum, GSE_sum, EDF1_1X, EDF1_2X,
-                EDF1_3X, EDF1_4X, EDF1_5X, EDF2_1X, EDF2_2X, EDF2_3X, EDF2_4X, EDF2_5X, EDF1_ratio_1X, EDF1_ratio_2X,
+                DPF_5X, GDE_ratio_1X, GDE_ratio_2X, GDE_ratio_3X, GDE_ratio_4X, GDE_ratio_5X, RFE_ratio_1X, RFE_ratio_2X,
+                RFE_ratio_3X, RFE_ratio_4X, RFE_ratio_5X, RLE_ratio_1X, RLE_ratio_2X, RLE_ratio_3X, RLE_ratio_4X, RLE_ratio_5X,
+                BPFI_1X, BPFI_2X, BPFI_3X, BPFI_4X, BPFI_5X, BPFO_1X, BPFO_2X, BPFO_3X, BPFO_4X, BPFO_5X, FTF_1X, FTF_2X, FTF_3X, FTF_4X,
+                FTF_5X, BSF_1X, BSF_2X, BSF_3X, BSF_4X, BSF_5X, GMF_1X, GMF_2X, GMF_3X, GMF_4X, GMF_5X, GLE_sum_1X, GLE_sum_2X,
+                GLE_sum_3X, GLE_sum_4X, GLE_sum_5X, GUE_sum_1X, GUE_sum_2X, GUE_sum_3X, GUE_sum_4X, GUE_sum_5X, Whirl_energy_sum,
+                BPF_1X, BPF_2X, BPF_3X, BPF_4X, BPF_5X, DBPF_1X, DBPF_2X, DBPF_3X, DBPF_4X, DBPF_5X, ISE_sum, GSE_sum, EDF1_1X,
+                EDF1_2X, EDF1_3X, EDF1_4X, EDF1_5X, EDF2_1X, EDF2_2X, EDF2_3X, EDF2_4X, EDF2_5X, EDF1_ratio_1X, EDF1_ratio_2X,
                 EDF1_ratio_3X, EDF1_ratio_4X, EDF1_ratio_5X, EDF2_ratio_1X, EDF2_ratio_2X, EDF2_ratio_3X, EDF2_ratio_4X,
-                EDF2_ratio_5X, EDF1_sum, EDF2_sum, DCValues, vel_pass_rms, vel_low_rms, vel_p, DCValues, ylb_SWE,
-                ylb_SWPE, ylb_SWPA, ylb_vel_rms, ylb_kur, ylb_acc_rms, ylb_impulse, DCValues, Current_RMS, Current_PK,
-                Current_CF, Current_Power_RMS, Current_THDF, Current_Odd_THD, Current_Even_THD, Current_Pos_THD,
-                Current_Neg_THD, Current_Zero_THD, Current_Total_THD, Voltage_RMS, Voltage_PK, Voltage_CF,
-                Voltage_Power_RMS, Voltage_THDF, Voltage_Odd_THD, Voltage_Even_THD, Voltage_Pos_THD, Voltage_Neg_THD,
-                Voltage_Zero_THD, Voltage_Total_THD, Noise_RMS, Noise_PK, Noise_Kurt, Noise_Imp, dis_voltgap, dis_pp,
-                dis_peak, dis_rms, dis_amp1x, dis_phase2x, dis_phase2x, dis_amp2x, dis_phase_1_2x, dis_amp_1_2x,
-                dis_ampRt, dis_kurt, dis_skew, dis_mean, dis_amp3x, dis_amp4x, dis_amp5x, dis_amp_1_2x, dis_amp_1_4x,
-                dis_amp_1_5x, DCValues, acc_rms, acc_peak, acc_kurt,  acc_skew, acc_crest, acc_shape, acc_pulse,
-                acc_margin, hf_impulse, lf_impulse, vel_pass_rms]
+                EDF2_ratio_5X, EDF1_sum, EDF2_sum, DCValues_acc, vel_pass_rms_sudu, vel_low_rms_sudu, vel_p_sudu,
+                DCValues_temp, ylb_SWE, ylb_SWPE, ylb_SWPA, ylb_vel_rms, ylb_kur, ylb_acc_rms, ylb_impulse, DCValues_ylb, Current_RMS, Current_PK,
+                Current_CF, Current_Power_RMS, Current_THDF, Current_Odd_THD, Current_Even_THD, Current_Pos_THD, Current_Neg_THD,
+                Current_Zero_THD, Current_Total_THD, Voltage_RMS, Voltage_PK, Voltage_CF, Voltage_Power_RMS,
+                Voltage_THDF, Voltage_Odd_THD, Voltage_Even_THD, Voltage_Pos_THD, Voltage_Neg_THD, Voltage_Zero_THD,
+                Voltage_Total_THD, Noise_RMS, Noise_PK, Noise_Kurt, Noise_Imp, dis_voltgap, dis_pp, dis_peak, dis_rms, dis_amp1x,
+                dis_phase2x, dis_phase2x, dis_amp2x, dis_phase_1_2x, dis_amp_1_2x, dis_ampRt, dis_kurt, dis_skew, dis_mean,
+                dis_amp3x, dis_amp4x, dis_amp5x, dis_amp_1_2x, dis_amp_1_4x, dis_amp_1_5x, DCValues_mc, acc_rms_mc, acc_peak_mc,
+                acc_kurt_mc, acc_skew_mc, acc_crest_mc, acc_shape_mc, acc_pulse_mc, acc_margin_mc, hf_impulse_mc, lf_impulse_mc, vel_pass_rms_mc, speed]
     return res_type
 
 
 def output_template_all(excel_path, my_deftable, output_path, need_channel_id=True):
-    ""
     """
     :param my_def: 特征对应注释
     :param excel_path: 设备参数表格位置
@@ -189,7 +192,7 @@ def output_template_all(excel_path, my_deftable, output_path, need_channel_id=Tr
     value_name = list(template_dataframe['数据项（特征）名称'])
     value_code = list(template_dataframe['数据项代号'])
     value_fea_type = list(template_dataframe['数据项（特征）类型'])
-    print(value_fea_type)
+    # print(value_fea_type)
     value_type = list(template_dataframe['数据类型'])
     value_unit = list(template_dataframe['单位'])
     tmp_data = []
@@ -199,30 +202,37 @@ def output_template_all(excel_path, my_deftable, output_path, need_channel_id=Tr
         if eq_name is None or eq_name == "" or eq_name == np.nan or pd.isna(eq_name) or pd.isnull(eq_name):
             continue
         result_type = output_template(df_row, bearing_data)
-        if sensor_type == '应力波':
-            tmp_data.append(
-                [eq_name, eq_code, point_name, point_code, sensor_type, '偏置电压',
-                 str(point_code) + '999', '应力波特征', '模拟量', 'V', channel_id])
-        elif sensor_type == "加速度" and point_code[-2:-1] not in ['X', 'Y', 'Z']:
-            tmp_data.append(
-                [eq_name, eq_code, point_name, point_code, sensor_type, '偏置电压',
-                 str(point_code) + '999', '时域特征', '模拟量', 'V', channel_id])
-        elif sensor_type == "速度":
-            tmp_data.append(
-                [eq_name, eq_code, point_name, point_code, sensor_type, '偏置电压',
-                 str(point_code) + '999', '时域特征', '模拟量', 'V', channel_id])
-        elif sensor_type == "冲击脉冲":
-            tmp_data.append(
-                [eq_name, eq_code, point_name, point_code, sensor_type, '偏置电压',
-                 str(point_code) + '999', '时域特征', '模拟量', 'V', channel_id])
-        elif sensor_type == "温度":
-            tmp_data.append(
-                [eq_name, eq_code, point_name, point_code, sensor_type, '轴承温度',
-                 str(point_code) + '000', '温度', '模拟量', '℃', channel_id])
-        elif sensor_type == "转速":
-            tmp_data.append(
-                [eq_name, eq_code, point_name, point_code, sensor_type, '转速',
-                 str(point_code) + '777', '工艺', '模拟量', 'rpm', channel_id])
+        # print(result_type)
+        # if sensor_type == '应力波':
+        #     # tmp_data.append(
+        #     #     [eq_name, eq_code, point_name, point_code, sensor_type, '偏置电压',
+        #     #      str(point_code) + '999', '应力波特征', '模拟量', 'V', channel_id])
+        #     pass
+        # elif sensor_type == "加速度" and point_code[-2:-1] not in ['X', 'Y', 'Z']:
+        #     # tmp_data.append(
+        #     #     [eq_name, eq_code, point_name, point_code, sensor_type, '偏置电压',
+        #     #      str(point_code) + '999', '时域特征', '模拟量', 'V', channel_id])
+        #     pass
+        # elif sensor_type == "速度":
+        #     # tmp_data.append(
+        #     #     [eq_name, eq_code, point_name, point_code, sensor_type, '偏置电压',
+        #     #      str(point_code) + '999', '时域特征', '模拟量', 'V', channel_id])
+        #     pass
+        # elif sensor_type == "冲击脉冲":
+        #     # tmp_data.append(
+        #     #     [eq_name, eq_code, point_name, point_code, sensor_type, '偏置电压',
+        #     #      str(point_code) + '999', '时域特征', '模拟量', 'V', channel_id])
+        #     pass
+        # elif sensor_type == "温度":
+        #     # tmp_data.append(
+        #     #     [eq_name, eq_code, point_name, point_code, sensor_type, '轴承温度',
+        #     #      str(point_code) + '000', '温度', '模拟量', '℃', channel_id])
+        #     pass
+        # elif sensor_type == "转速":
+        #     # tmp_data.append(
+        #     #     [eq_name, eq_code, point_name, point_code, sensor_type, '转速',
+        #     #      str(point_code) + '777', '工艺', '模拟量', 'rpm', channel_id])
+        #     pass
         tmp_data += [
             [eq_name, eq_code, point_name, point_code, sensor_type, value_name[res_index],
              str(point_code) + str(value_code[res_index]).zfill(3), value_type[res_index],
