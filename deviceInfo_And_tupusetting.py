@@ -179,20 +179,31 @@ def tupuSetting_V2(file1, file4):
 
 
 def tupuSetting_V3(file1, file4):
+    df1_1 = pd.read_excel(file1, dtype=str, sheet_name="设备档案")
     df1_2 = pd.read_excel(file1, dtype=str, sheet_name="输出模板")
 
-    df_tupu = pd.DataFrame(columns=['设备名称', '设备编码', '测点（点位）名称', '测点（点位）编码', '测点（通道）类型',
+    df_tupu = pd.DataFrame(columns=['区域', '设备名称', '设备编码', '测点（点位）名称', '测点（点位）编码', '测点（通道）类型',
                                     '波形数据名称', '波形数据编码', '波形数据类型', '数据类型', '单位',
                                     '抽样频率（Hz）', '采样时长(s)', '高通滤波（Hz）', '分析截止频率（Hz）',
                                     '采样点数（需求）'])
+    equipcod_keylist = df1_1['*设备编码'].to_list()
+    area_valuelist = df1_1["* 所属区域"].to_list()
+    dict2 = dict(zip(equipcod_keylist, area_valuelist))
+
     pointcod_list_only = []
     for index, series in df1_2.iterrows():
+        equip_cod = series['设备编码']
+        # if equip_cod in dict2:
+        #     df_deviceinfo.at[index, '区域'] = dict2[equip_cod]
+        # else:
+        #     df_deviceinfo.at[index, '区域'] = 'Unknown'  # 可以设置一个默认值，以便调试
         if series['测点（点位）编码'] not in pointcod_list_only and series['测点（通道）类型'] in list(settings_V3.keys()):
             print(series['测点（通道）类型'], pointcod_list_only, series['测点（通道）类型'])
             if series['测点（通道）类型'] == "加速度" and series['测点（点位）编码'][-2:-1] in ['X', 'Y', 'Z']:
                 series['测点（通道）类型'] = "无线传感器"
             number = len(settings_V3[series['测点（通道）类型']][0])
             new_data = pd.DataFrame({
+                '区域': [dict2[equip_cod]] * number,
                 '设备名称': [series['设备名称']] * number,
                 '设备编码': [series['设备编码']] * number,
                 '测点（点位）名称': [series['测点（点位）名称']] * number,
