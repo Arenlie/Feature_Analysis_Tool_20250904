@@ -20,13 +20,13 @@ def device_info(file1, file2, file4):
             df1_2.at[index, '单位'] = '℃'
 
     rows_to_be_deleted = []
-    for index, series in df1_2.iterrows():
-        if (str(series['测点（点位）编码'])[-2:-1] in ['X', 'Y', 'Z'] and
-                str(series['数据项（特征）编码'])[-3:] not in ['001', '003', '004', '005', '008'] and
-                series['测点（通道）类型'] == '加速度'):
-            rows_to_be_deleted.append(index)
-
-    df1_2 = df1_2.drop(rows_to_be_deleted)  # 删除无线传感器的多余特征项
+    # for index, series in df1_2.iterrows():
+    #     if (str(series['测点（点位）编码'])[-2:-1] in ['X', 'Y', 'Z'] and
+    #             str(series['数据项（特征）编码'])[-3:] not in ['001', '003', '004', '005', '008'] and
+    #             series['测点（通道）类型'] == '加速度'):
+    #         rows_to_be_deleted.append(index)
+    #
+    # df1_2 = df1_2.drop(rows_to_be_deleted)  # 删除无线传感器的多余特征项
 
     # 建立device_info
     df4 = df1_2
@@ -102,7 +102,7 @@ def device_info(file1, file2, file4):
             df_deviceinfo.at[index, 'MAC地址'] = mac
 
         data_type_cod3 = series['数据项编码'][-3:]
-        print("data_type_cod3:", data_type_cod3)
+        # print("data_type_cod3:", data_type_cod3)
         if series['测点编号'][-2] in ['Z'] and series['测点类型'] == '加速度':
             if data_type_cod3 == '001':
                 df_deviceinfo.at[index, '通道值'] = 'integratRMS'
@@ -129,8 +129,8 @@ def device_info(file1, file2, file4):
                 df_deviceinfo.at[index, '通道值'] = 'integratPk'
             elif data_type_cod3 == '000':
                 df_deviceinfo.at[index, '通道值'] = 'TemperatureBot'
-        else:
-            df_deviceinfo.at[index, '通道值'] = dict1.get(data_type_cod3, 'Unknown')  # 使用dict1查找通道值，默认Unknown
+        # else:
+        df_deviceinfo.at[index, '通道值'] = dict1.get(data_type_cod3, 'Unknown')  # 使用dict1查找通道值，默认Unknown
     # 删除标记的行
     df_deviceinfo_cleaned = df_deviceinfo.drop(rows_to_drop)
     # df_deviceinfo_cleaned.to_excel(file4, sheet_name='Sheet1', index=False)  # 保存为device-info_new.xlsx
