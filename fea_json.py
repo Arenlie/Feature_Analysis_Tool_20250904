@@ -151,7 +151,10 @@ def feature_json(input_data, output_path):
         # 创建row_json_cs
         point_type_index = point_type_list.index(point_type)
         # print("point_type_index", point_type_index)
-        row_json_cs = copy.deepcopy(json_channel_settings[0])
+        if row_board_type == '高速卡':
+            row_json_cs = copy.deepcopy(json_channel_settings[0])
+        else:
+            row_json_cs = copy.deepcopy(json_channel_settings[6])
         # 指定测点名称
         if not none_judge(channel_name):
             row_json_cs['channelName'] = f'第{int(row_card_index)}板卡第{int(channel_index)}通道'
@@ -171,7 +174,7 @@ def feature_json(input_data, output_path):
             if row_board_type == '高速卡':
                 json_channel_setting_tmp = copy.deepcopy(json_channel_settings[0])
             else:
-                json_channel_setting_tmp = copy.deepcopy(json_channel_settings[6])
+                json_channel_setting_tmp = copy.deepcopy(json_channel_settings[8])
             json_channel_setting_tmp['channelId'] = mac_address + row_card_index + channel_index
             json_channel_setting_tmp['isEnable'] = 0
             json_channel_setting_tmp['isWork'] = 0
