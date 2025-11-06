@@ -129,8 +129,8 @@ def device_info(file1, file2, file4):
                 df_deviceinfo.at[index, '通道值'] = 'integratPk'
             elif data_type_cod3 == '000':
                 df_deviceinfo.at[index, '通道值'] = 'TemperatureBot'
-        # else:
-        df_deviceinfo.at[index, '通道值'] = dict1.get(data_type_cod3, 'Unknown')  # 使用dict1查找通道值，默认Unknown
+        else:
+            df_deviceinfo.at[index, '通道值'] = dict1.get(data_type_cod3, 'Unknown')  # 使用dict1查找通道值，默认Unknown
     # 删除标记的行
     df_deviceinfo_cleaned = df_deviceinfo.drop(rows_to_drop)
     # df_deviceinfo_cleaned.to_excel(file4, sheet_name='Sheet1', index=False)  # 保存为device-info_new.xlsx
@@ -236,3 +236,4 @@ if __name__ == "__main__":
     device_info(r"H:\chaos项目资料\特征解析工具汇编\测试文件\data_all - 平台导入表(电流电压).xlsx",
                 "后台文件/my_def_对应注释.xlsx", "device.xlsx")
     # tupuSetting_V3(r"H:\chaos项目资料\特征解析工具汇编\测试文件\data_all - 平台导入表(电流电压).xlsx", "tupusetting.xlsx")
+
